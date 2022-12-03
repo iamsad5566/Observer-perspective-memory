@@ -1,5 +1,9 @@
 package material
 
+import (
+	"strconv"
+)
+
 type Stimuli struct {
 	Mask  string
 	Array []string
@@ -7,6 +11,11 @@ type Stimuli struct {
 
 func (s *Stimuli) Load() {
 	s.Mask = "material/Mask.png"
-	s.Array = append(s.Array, "material/P1.jpg")
-	s.Array = append(s.Array, "material/P2.jpg")
+
+	prefix := "material/P"
+	suffix := ".jpg"
+
+	for i := 1; i <= 26; i++ {
+		s.Array = append(s.Array, prefix+strconv.Itoa(i)+suffix)
+	}
 }
