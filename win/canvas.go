@@ -9,13 +9,18 @@ import (
 	"fyne.io/fyne/v2/container"
 )
 
-func BuildInstructWin(instruct string, keypress string) fyne.CanvasObject {
-	upperText := canvas.NewText(instruct, nil)
-	lowerText := canvas.NewText(keypress, nil)
-	upperText.TextSize = 35
-	lowerText.TextSize = 30
-	content := container.NewGridWithRows(4, canvas.NewLine(nil), container.NewCenter(upperText), container.NewCenter(lowerText), canvas.NewLine(nil))
+func BuildInstructWin(instructs *material.Instructions) *fyne.Container {
+	instructs.Begin.TextSize = 35
+	instructs.PressSpace.TextSize = 30
+	content := container.NewGridWithRows(4, canvas.NewLine(nil), container.NewCenter(instructs.Begin), container.NewCenter(instructs.PressSpace), canvas.NewLine(nil))
+
 	return content
+}
+
+func Reload(window *fyne.Container, instructs *material.Instructions) {
+	instructs.Begin.Text = instructs.Description.Text
+	instructs.Begin.TextSize = 10
+	window.Refresh()
 }
 
 func BuildStimuliWin(currIndex int, condition int) fyne.CanvasObject {
