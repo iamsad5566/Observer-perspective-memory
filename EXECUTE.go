@@ -1,7 +1,7 @@
 package main
 
 import (
-	"observerPerspective/event"
+	"fmt"
 	"observerPerspective/obj"
 
 	"fyne.io/fyne/v2"
@@ -17,7 +17,7 @@ const (
 	ResponsePhase
 )
 
-var keepGoing bool = false
+var waiting bool = true
 
 func main() {
 	openGUI()
@@ -39,9 +39,14 @@ func procedureController(window *fyne.Window) {
 	canvases.Load()
 	containers := &obj.Containers{}
 	containers.Load(canvases)
-	// event.CaptureEscape(window)
-	event.CaptureZoom(window, ResponsePhase, canvases.Picture)
-	obj.GetInstruction(window, canvases)
+
+	go func() {
+		for waiting {
+			obj.GetInstruction(window, canvases, "Begin.jpg", &waiting)
+		}
+		fmt.Println("keepgoing")
+	}()
+
 	(*window).SetContent(containers.Stimuli)
 	(*window).ShowAndRun()
 }

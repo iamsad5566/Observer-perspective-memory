@@ -17,6 +17,9 @@ func (c *Containers) Load(canvases *Canvases) {
 	c.Stimuli = container.NewCenter(canvases.Picture, canvases.Mask)
 }
 
-func GetInstruction(window *fyne.Window, canvases *Canvases) {
-	event.Test(window, canvases.Picture)
+func GetInstruction(window *fyne.Window, canvases *Canvases, fileName string, waiting *bool) {
+	canvases.Instruction.File = fileName
+	canvases.Instruction.Refresh()
+
+	event.SpaceContinue(window, waiting)
 }

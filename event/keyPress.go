@@ -50,12 +50,11 @@ func CaptureZoom(window *fyne.Window, condition int, target *canvas.Image) {
 	}
 }
 
-func Test(window *fyne.Window, target *canvas.Image) {
+func SpaceContinue(window *fyne.Window, waiting *bool) {
 	if desk, ok := (*window).Canvas().(desktop.Canvas); ok {
 		desk.SetOnKeyDown(func(ke *fyne.KeyEvent) {
 			if ke.Name == "Space" {
-				target.File = "material/P2.jpg"
-				target.Refresh()
+				*waiting = false
 			}
 		})
 	}
