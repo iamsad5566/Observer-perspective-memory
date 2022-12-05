@@ -2,7 +2,7 @@ package main
 
 import (
 	"observerPerspective/event"
-	"observerPerspective/win"
+	"observerPerspective/obj"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -12,9 +12,12 @@ var width float32 = 1920
 var height float32 = 1440
 
 const (
-	ShowingPhase = iota
+	InstructionPhase = iota
+	ShowingPhase
 	ResponsePhase
 )
+
+var keepGoing bool = false
 
 func main() {
 	openGUI()
@@ -28,13 +31,17 @@ func openGUI() {
 	window.Resize(fyne.NewSize(width, height))
 	window.SetFixedSize(false)
 	window.SetFullScreen(false)
-	window.SetContent(procedureController(&window))
-	window.ShowAndRun()
+	procedureController(&window)
 }
 
-func procedureController(window *fyne.Window) fyne.CanvasObject {
-	event.CaptureEscape(window)
-	sti, _ := win.BuildShowingPicsWin(window, ResponsePhase)
-
-	return sti
+func procedureController(window *fyne.Window) {
+	canvases := &obj.Canvases{}
+	canvases.Load()
+	containers := &obj.Containers{}
+	containers.Load(canvases)
+	// event.CaptureEscape(window)
+	event.CaptureZoom(window, ResponsePhase, canvases.Picture)
+	obj.GetInstruction(window, canvases)
+	(*window).SetContent(containers.Stimuli)
+	(*window).ShowAndRun()
 }

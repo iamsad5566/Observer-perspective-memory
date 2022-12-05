@@ -41,6 +41,21 @@ func CaptureZoom(window *fyne.Window, condition int, target *canvas.Image) {
 				height /= percentage
 				target.SetMinSize(fyne.Size{Width: width, Height: height})
 				target.Refresh()
+			} else if ke.Name == "Escape" {
+				(*window).Close()
+			} else if ke.Name == "Space" {
+
+			}
+		})
+	}
+}
+
+func Test(window *fyne.Window, target *canvas.Image) {
+	if desk, ok := (*window).Canvas().(desktop.Canvas); ok {
+		desk.SetOnKeyDown(func(ke *fyne.KeyEvent) {
+			if ke.Name == "Space" {
+				target.File = "material/P2.jpg"
+				target.Refresh()
 			}
 		})
 	}
