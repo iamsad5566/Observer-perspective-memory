@@ -2,7 +2,6 @@ package main
 
 import (
 	"observerPerspective/event"
-	"observerPerspective/material"
 	"observerPerspective/win"
 
 	"fyne.io/fyne/v2"
@@ -24,7 +23,7 @@ func main() {
 // openGUI starts a new program
 func openGUI() {
 	guiApp := app.New()
-	// guiApp.Settings().SetTheme(&myTheme{})
+	guiApp.Settings().SetTheme(&myTheme{})
 	window := guiApp.NewWindow("Observer perspective memory")
 	window.Resize(fyne.NewSize(width, height))
 	window.SetFixedSize(false)
@@ -34,11 +33,8 @@ func openGUI() {
 }
 
 func procedureController(window fyne.Window) fyne.CanvasObject {
-	instructs := material.Instructions{}
-	instructs.LoadEng()
-	go event.CaptureEscape(window)
-	content := win.BuildInstructWin(&instructs)
-	win.Reload(content, &instructs)
 
-	return content
+	go event.CaptureEscape(window)
+
+	return win.BuildStimuliWin(0, 0)
 }

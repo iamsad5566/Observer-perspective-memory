@@ -5,12 +5,14 @@ import (
 )
 
 type Stimuli struct {
-	Mask  string
-	Array []string
+	Mask        string
+	Array       []string
+	Description string
 }
 
 func (s *Stimuli) Load() {
 	s.Mask = "material/Mask.png"
+	s.Description = "material/Description.png"
 
 	prefix := "material/P"
 	suffix := ".jpg"
