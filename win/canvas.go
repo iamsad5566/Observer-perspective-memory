@@ -1,8 +1,10 @@
 package win
 
 import (
-	"fmt"
+	"math/rand"
+	"observerPerspective/event"
 	"observerPerspective/material"
+	"time"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -13,7 +15,7 @@ const width, height float32 = 1920, 1440
 
 var stimuliMaterial material.Stimuli = material.Stimuli{}
 
-func BuildInstructWin() *fyne.Container {
+func BuildInstructWin(window fyne.Window) *fyne.Container {
 	stimuliMaterial.Load()
 	s := canvas.NewImageFromFile(stimuliMaterial.Description)
 	s.SetMinSize(fyne.Size{Width: width, Height: height})
@@ -22,10 +24,21 @@ func BuildInstructWin() *fyne.Container {
 	return container.NewCenter(s)
 }
 
-func BuildStimuliWin(currIndex int, condition int) fyne.CanvasObject {
+func BuildShowingPicsWin(window *fyne.Window, ShowingPhase int) (fyne.CanvasObject, []string) {
+	stimuliList := make([]string, 20)
 	stimuliMaterial.Load()
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(stimuliMaterial.Array), func(i, j int) {
+		stimuliMaterial.Array[i], stimuliMaterial.Array[j] = stimuliMaterial.Array[j], stimuliMaterial.Array[i]
+	})
+
+	for i := 0; i < 20; i++ {
+		stimuliList[i] = stimuliMaterial.Array[i]
+	}
+
 	currStimulus := Stimulus{}
-	currStimulus.initialize(stimuliMaterial.Array[0])
+	currStimulus.initialize(stimuliList[0])
+
 	target := canvas.NewImageFromFile(currStimulus.Current)
 	target.SetMinSize(fyne.Size{Width: width, Height: height})
 	target.FillMode = canvas.ImageFillContain
@@ -34,10 +47,7 @@ func BuildStimuliWin(currIndex int, condition int) fyne.CanvasObject {
 	mask.SetMinSize(fyne.Size{Width: width, Height: height})
 	mask.FillMode = canvas.ImageFillStretch
 
-	// insert condition == 1
-	if condition == 1 {
-		fmt.Println("ok")
-	}
+	event.CaptureZoom(window, ShowingPhase, target)
 
-	return container.NewCenter(target, mask)
+	return container.NewCenter(target, mask), stimuliList
 }

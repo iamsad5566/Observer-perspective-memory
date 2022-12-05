@@ -27,14 +27,14 @@ func openGUI() {
 	window := guiApp.NewWindow("Observer perspective memory")
 	window.Resize(fyne.NewSize(width, height))
 	window.SetFixedSize(false)
-	window.SetFullScreen(true)
-	window.SetContent(procedureController(window))
+	window.SetFullScreen(false)
+	window.SetContent(procedureController(&window))
 	window.ShowAndRun()
 }
 
-func procedureController(window fyne.Window) fyne.CanvasObject {
+func procedureController(window *fyne.Window) fyne.CanvasObject {
+	event.CaptureEscape(window)
+	sti, _ := win.BuildShowingPicsWin(window, ResponsePhase)
 
-	go event.CaptureEscape(window)
-
-	return win.BuildStimuliWin(0, 0)
+	return sti
 }
