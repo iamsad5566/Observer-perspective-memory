@@ -38,7 +38,7 @@ func openGUI() {
 	window := guiApp.NewWindow("Observer perspective memory")
 	window.Resize(fyne.NewSize(width, height))
 	window.SetFixedSize(false)
-	window.SetFullScreen(false)
+	window.SetFullScreen(true)
 	procedureController(&window)
 }
 
