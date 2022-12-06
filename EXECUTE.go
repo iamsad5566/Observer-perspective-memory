@@ -63,7 +63,7 @@ func procedureController(window *fyne.Window) {
 
 		for _, str := range pictureFile.Slice {
 			obj.GetStimulus(window, canvases, str)
-			time.Sleep(time.Second * 1)
+			time.Sleep(time.Second * 5)
 			canvases.Picture.File = pictureFile.Mask
 			canvases.Picture.Refresh()
 			time.Sleep(time.Second)
