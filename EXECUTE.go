@@ -14,12 +14,6 @@ import (
 var width float32 = 1920
 var height float32 = 1440
 
-const (
-	InstructionPhase = iota
-	ShowingPhase
-	ResponsePhase
-)
-
 var waiting bool = true
 var instructFile *material.InstructFile = &material.InstructFile{}
 var pictureFile *material.PictureFile = &material.PictureFile{}
@@ -71,7 +65,7 @@ func procedureController(window *fyne.Window) {
 			time.Sleep(time.Second)
 		}
 
-		// Response pahse
+		// Response phase
 		content.RemoveAll()
 		content.Add(containers.Instruction)
 		content.Refresh()
@@ -83,7 +77,7 @@ func procedureController(window *fyne.Window) {
 		pictureFile.ShuffleSlice()
 
 		// Show pictures
-		// Response pahse
+		// Response phase
 		content.RemoveAll()
 		content.Add(containers.Stimuli)
 		content.Refresh()
