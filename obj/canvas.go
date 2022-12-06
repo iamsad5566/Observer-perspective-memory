@@ -21,7 +21,7 @@ func (c *Canvases) Load(instructFile *material.InstructFile, pictureFile *materi
 	c.Instruction.FillMode = canvas.ImageFillContain
 
 	c.Picture = canvas.NewImageFromFile(pictureFile.CurrentPicture)
-	c.Picture.SetMinSize(fyne.Size{Width: width * 0.6, Height: height * 0.6})
+	c.Picture.SetMinSize(fyne.Size{Width: width * 0.7, Height: height * 0.7})
 	c.Picture.FillMode = canvas.ImageFillContain
 
 	c.Mask = canvas.NewImageFromFile(pictureFile.Mask)

@@ -24,12 +24,12 @@ func CaptureZoom(window *fyne.Window, target *canvas.Image, waiting *bool) {
 
 	if desk, ok := (*window).Canvas().(desktop.Canvas); ok {
 		desk.SetOnKeyDown(func(ke *fyne.KeyEvent) {
-			if ke.Name == "Up" {
+			if ke.Name == "Up" && height <= 1440/percentage {
 				width *= percentage
 				height *= percentage
 				target.SetMinSize(fyne.Size{Width: width, Height: height})
 				target.Refresh()
-			} else if ke.Name == "Down" {
+			} else if ke.Name == "Down" && height >= 640*percentage {
 				width /= percentage
 				height /= percentage
 				target.SetMinSize(fyne.Size{Width: width, Height: height})

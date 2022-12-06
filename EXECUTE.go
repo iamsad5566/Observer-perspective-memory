@@ -33,11 +33,15 @@ func openGUI() {
 	window.Resize(fyne.NewSize(width, height))
 	window.SetFixedSize(false)
 	window.SetFullScreen(true)
+
 	procedureController(&window)
 }
 
 func procedureController(window *fyne.Window) {
+
 	content := container.NewCenter(containers.Instruction)
+	(*window).Canvas()
+
 	go func() {
 		// Fist Instruction
 		obj.GetInstruction(window, canvases, instructFile.Begin, &waiting)
