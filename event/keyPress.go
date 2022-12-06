@@ -36,6 +36,8 @@ func CaptureZoom(window *fyne.Window, target *canvas.Image, waiting *bool) {
 				target.Refresh()
 			} else if ke.Name == "Return" {
 				*waiting = false
+			} else if ke.Name == "Escape" {
+				(*window).Close()
 			}
 		})
 	}
@@ -46,6 +48,8 @@ func SpaceContinue(window *fyne.Window, waiting *bool) {
 		desk.SetOnKeyDown(func(ke *fyne.KeyEvent) {
 			if ke.Name == "Space" || ke.Name == "Return" {
 				*waiting = false
+			} else if ke.Name == "Escape" {
+				(*window).Close()
 			}
 		})
 	}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"observerPerspective/event"
 	"observerPerspective/material"
 	"observerPerspective/obj"
 	"time"
@@ -60,6 +61,7 @@ func procedureController(window *fyne.Window) {
 		content.RemoveAll()
 		content.Add(containers.Stimuli)
 		content.Refresh()
+		event.CaptureEscape(window)
 
 		for _, str := range pictureFile.Slice {
 			obj.GetStimulus(window, canvases, str)
