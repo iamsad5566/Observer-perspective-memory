@@ -23,3 +23,14 @@ func GetInstruction(window *fyne.Window, canvases *Canvases, fileName string, wa
 
 	event.SpaceContinue(window, waiting)
 }
+
+func GetStimulus(window *fyne.Window, canvases *Canvases, fileName string) {
+	canvases.Picture.File = fileName
+	canvases.Picture.Refresh()
+}
+
+func GetResponseToStimulus(window *fyne.Window, canvases *Canvases, fileName string, waiting *bool) {
+	canvases.Picture.File = fileName
+	canvases.Picture.Refresh()
+	event.CaptureZoom(window, canvases.Picture, waiting)
+}

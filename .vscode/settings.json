@@ -1,5 +1,5 @@
 {
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "golang.go-nightly",
+  "editor.defaultFormatter": "golang.go",
   "go.formatTool": "gofmt"
 }
