@@ -11,8 +11,7 @@ import (
 	"fyne.io/fyne/v2/container"
 )
 
-var width float32 = 1920
-var height float32 = 1440
+const width, height float32 = 1920, 1440
 
 var waiting bool = true
 var instructFile *material.InstructFile = &material.InstructFile{}
