@@ -39,7 +39,6 @@ func openGUI() {
 func procedureController(window *fyne.Window) {
 
 	content := container.NewCenter(containers.Instruction)
-	(*window).Canvas()
 
 	go func() {
 		// Fist Instruction
