@@ -7,7 +7,7 @@ import (
 	"fyne.io/fyne/v2/canvas"
 )
 
-const width, height float32 = 1920, 1440
+const width, height float32 = 1920, 1080
 
 type Canvases struct {
 	Instruction *canvas.Image
@@ -17,8 +17,8 @@ type Canvases struct {
 
 func (c *Canvases) Load(instructFile *material.InstructFile, pictureFile *material.PictureFile) {
 	c.Instruction = canvas.NewImageFromFile(instructFile.CurrentInstruction)
-	c.Instruction.SetMinSize(fyne.Size{Width: width, Height: height})
-	c.Instruction.FillMode = canvas.ImageFillContain
+	c.Instruction.SetMinSize(fyne.Size{Width: width * 0.8, Height: height * 0.8})
+	c.Instruction.FillMode = canvas.ImageFillStretch
 
 	c.Picture = canvas.NewImageFromFile(pictureFile.CurrentPicture)
 	c.Picture.SetMinSize(fyne.Size{Width: width * 0.7, Height: height * 0.7})
