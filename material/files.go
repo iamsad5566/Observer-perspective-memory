@@ -30,7 +30,7 @@ func (pic *PictureFile) Load() {
 	prefixPic := "material/P"
 	suffixPic := ".jpg"
 
-	for i := 1; i <= 20; i++ {
+	for i := 1; i <= 2; i++ {
 		pic.Slice = append(pic.Slice, prefixPic+strconv.Itoa(i)+suffixPic)
 	}
 
