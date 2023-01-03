@@ -1,6 +1,4 @@
 # Observer perspective memory
----
-
 ## Program structure:
 - **Entry point:** `EXECUTE.go`
 - **Event control:** `event/keyPress.go`
@@ -11,7 +9,6 @@
     - **Instructions:** `material/I/`
     - **Stimuli:** `material/P/`
 - **Theme control:** `theme.go`
----
 
 ## Illustration:
 The whole procedure is defined under `procedureController` func in `EXECUTE.go`. Adjusting it if there's any need. After making any change, type `go build -o EXECUTE.exe` to rebuild the binary executable file.
