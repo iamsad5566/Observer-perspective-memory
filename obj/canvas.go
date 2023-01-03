@@ -15,7 +15,7 @@ var width float32
 var height float32
 var picWidth float32
 var picHeight float32
-var ratio = []float32{1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9}
+var ratio = []float32{1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9}
 
 type Canvases struct {
 	Instruction *canvas.Image
@@ -42,7 +42,7 @@ func (c *Canvases) Load(instructFile *material.InstructFile, pictureFile *materi
 }
 
 func (c *Canvases) ReSize(index int) {
-	c.Picture.SetMinSize(fyne.Size{Width: picWidth * ratio[index], Height: picHeight * ratio[index]})
+	c.Picture.SetMinSize(fyne.Size{Width: picWidth * ratio[index%len(ratio)], Height: picHeight * ratio[index%len(ratio)]})
 }
 
 func loadEnv() {
