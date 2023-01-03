@@ -11,7 +11,7 @@
 - **Theme control:** `theme.go`
 
 ## Illustration:
-The whole procedure is defined under `procedureController` func in `EXECUTE.go`. Adjusting it if there's any need. After making any change, type `go build -o EXECUTE.exe` to rebuild the binary executable file.
+The whole procedure is defined under `procedureController` func in `EXECUTE.go`. Adjusting it if there's any need. After making any change, type `go build -o EXECUTE.exe` in the terminal to rebuild the binary executable file.
 
 Replacing the pictures in `material/P` or `material/I` to change the stimuli or instruction (don't need to rebuild).
 
