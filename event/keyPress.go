@@ -66,6 +66,32 @@ func SpaceContinue(window *fyne.Window, waiting *bool) {
 	}
 }
 
+func PreTrainResponse(window *fyne.Window, correct *bool, waiting *bool) {
+	if desk, ok := (*window).Canvas().(desktop.Canvas); ok {
+		desk.SetOnKeyDown(func(ke *fyne.KeyEvent) {
+			if ke.Name == "F" {
+				*correct = true
+				*waiting = false
+			} else if ke.Name == "J" {
+				*correct = false
+				*waiting = false
+			} else if ke.Name == "Escape" {
+				(*window).Close()
+			}
+		})
+	}
+}
+
+func Leave(window *fyne.Window, waiting *bool) {
+	if desk, ok := (*window).Canvas().(desktop.Canvas); ok {
+		desk.SetOnKeyDown(func(ke *fyne.KeyEvent) {
+			if ke.Name == "Return" || ke.Name == "Space" {
+				(*window).Close()
+			}
+		})
+	}
+}
+
 func getHeightAndWidth() (float32, float32) {
 	h := os.Getenv("HEIGHT")
 	w := os.Getenv("WIDTH")
