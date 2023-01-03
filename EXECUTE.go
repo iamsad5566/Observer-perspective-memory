@@ -156,7 +156,7 @@ func procedureController(window *fyne.Window) {
 
 		// I14
 		if group == 1 {
-			obj.GetInstruction(window, canvases, instructFile.Instructions[14], &waiting)
+			obj.GetInstruction(window, canvases, instructFile.Instructions[13], &waiting)
 			waitKeyPress()
 		} else {
 			// I15
