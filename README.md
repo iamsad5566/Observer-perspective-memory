@@ -20,7 +20,7 @@ Results will be exported to the `result` folder.
 ## Before executing:
 Adjusting the parameters in the `.env` to what you want. Make sure to update the subject number(`SUBJECT_NUM`) and the assigned group(`GROUP`) before each task starts.
 
-GROUP = 1 -> I14.jpg
+GROUP = 1 -> I14.jpg   
 GROUP = 2 -> I15.jpg
 
 ## Execution:
