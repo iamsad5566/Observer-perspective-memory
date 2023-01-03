@@ -24,13 +24,14 @@ func GetInstruction(window *fyne.Window, canvases *Canvases, fileName string, wa
 	event.SpaceContinue(window, waiting)
 }
 
-func GetStimulus(window *fyne.Window, canvases *Canvases, fileName string) {
+func GetStimulus(canvases *Canvases, fileName string) {
 	canvases.Picture.File = fileName
 	canvases.Picture.Refresh()
 }
 
-func GetResponseToStimulus(window *fyne.Window, canvases *Canvases, fileName string, waiting *bool) {
+func GetResponseToStimulus(window *fyne.Window, canvases *Canvases, fileName string, waiting *bool, result *[]float32) {
 	canvases.Picture.File = fileName
+	canvases.ReSize()
 	canvases.Picture.Refresh()
-	event.CaptureZoom(window, canvases.Picture, waiting)
+	event.CaptureZoom(window, canvases.Picture, waiting, result)
 }

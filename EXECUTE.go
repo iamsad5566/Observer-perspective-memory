@@ -1,17 +1,23 @@
 package main
 
 import (
+	"fmt"
+	"log"
 	"observerPerspective/event"
 	"observerPerspective/material"
 	"observerPerspective/obj"
+	"os"
+	"strconv"
 	"time"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
+	"github.com/joho/godotenv"
 )
 
-const width, height float32 = 1920, 1080
+var width float32
+var height float32
 
 var waiting bool = true
 var instructFile *material.InstructFile = &material.InstructFile{}
@@ -19,8 +25,26 @@ var pictureFile *material.PictureFile = &material.PictureFile{}
 var canvases *obj.Canvases = &obj.Canvases{}
 var containers *obj.Containers = &obj.Containers{}
 
+// Result
+var result = []float32{}
+
 func main() {
+	loadEnv()
 	openGUI()
+}
+
+func loadEnv() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Println(err)
+	}
+
+	strWidth := os.Getenv("WIDTH")
+	strHeight := os.Getenv("HEIGHT")
+	width64, _ := strconv.ParseFloat(strWidth, 32)
+	height64, _ := strconv.ParseFloat(strHeight, 32)
+	width = float32(width64)
+	height = float32(height64)
 }
 
 // openGUI starts a new program
@@ -60,7 +84,7 @@ func procedureController(window *fyne.Window) {
 		event.CaptureEscape(window)
 
 		for _, str := range pictureFile.Slice {
-			obj.GetStimulus(window, canvases, str)
+			obj.GetStimulus(canvases, str)
 			time.Sleep(time.Second * 5)
 			canvases.Picture.File = pictureFile.Mask
 			canvases.Picture.Refresh()
@@ -75,9 +99,6 @@ func procedureController(window *fyne.Window) {
 		obj.GetInstruction(window, canvases, instructFile.Prepare, &waiting)
 		waitKeyPress()
 
-		// Shuffle first
-		pictureFile.ShuffleSlice()
-
 		// Show pictures
 		// Response phase
 		content.RemoveAll()
@@ -85,12 +106,14 @@ func procedureController(window *fyne.Window) {
 		content.Refresh()
 
 		for _, str := range pictureFile.Slice {
-			obj.GetResponseToStimulus(window, canvases, str, &waiting)
+			obj.GetResponseToStimulus(window, canvases, str, &waiting, &result)
 			waitKeyPress()
 			canvases.Picture.File = pictureFile.Mask
 			canvases.Picture.Refresh()
 			time.Sleep(time.Second)
 		}
+
+		fmt.Println(result)
 	}()
 
 	(*window).SetContent(content)
