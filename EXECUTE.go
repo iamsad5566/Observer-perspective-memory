@@ -140,6 +140,7 @@ func procedureController(window *fyne.Window) {
 		content.Refresh()
 		event.CaptureEscape(window)
 
+		// Iterate the stimuli
 		for _, str := range pictureFile.Slice {
 			obj.GetStimulus(canvases, str)
 			time.Sleep(time.Second * time.Duration(showingTime))
@@ -169,6 +170,7 @@ func procedureController(window *fyne.Window) {
 		content.Add(containers.Stimuli)
 		content.Refresh()
 
+		// Iterate the stimuli
 		for i, str := range pictureFile.Slice {
 			obj.GetResponseToStimulus(window, canvases, str, &waiting, &result, i)
 			waitKeyPress()
@@ -197,6 +199,7 @@ func intializeObjects() {
 	containers.Load(canvases)
 }
 
+// Before the return or space is pressed, the procedure will be paused
 func waitKeyPress() {
 	for waiting {
 		continue
@@ -204,6 +207,7 @@ func waitKeyPress() {
 	waiting = true
 }
 
+// Exports a csv and a zip files
 func exportData() {
 	file, _ := os.Create("result/" + subject + ".csv")
 	file.WriteString("trial,ratio,group\n")
