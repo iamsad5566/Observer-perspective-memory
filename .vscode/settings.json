@@ -4,5 +4,5 @@
     "build.allowImplicitNetworkAccess": true,
     
 },
-"editor.defaultFormatter": "golang.go"
+"editor.defaultFormatter": "golang.go-nightly"
 }

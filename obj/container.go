@@ -24,9 +24,9 @@ func GetInstruction(window *fyne.Window, canvases *Canvases, fileName string, wa
 	event.SpaceContinue(window, waiting)
 }
 
-func GetPreTrainStimulus(window *fyne.Window, canvases *Canvases, fileName string) {
-	canvases.Instruction.File = fileName
-	canvases.Instruction.Refresh()
+func GetPreTrainStimulus(canvases *Canvases, fileName string) {
+	canvases.Picture.File = fileName
+	canvases.Picture.Refresh()
 }
 
 func PreTrainInstruction(window *fyne.Window, canvases *Canvases, fileName string, correct *bool, waiting *bool) {

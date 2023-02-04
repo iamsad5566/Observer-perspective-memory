@@ -72,6 +72,7 @@ func openGUI() {
 func procedureController(window *fyne.Window) {
 
 	content := container.NewCenter(containers.Instruction)
+	preTrialCorrection := []bool{}
 
 	go func() {
 		// I1
@@ -90,49 +91,85 @@ func procedureController(window *fyne.Window) {
 		obj.GetInstruction(window, canvases, instructFile.Instructions[3], &waiting)
 		waitKeyPress()
 
-		// I5
+		// I5 -> FP 1~6
+		content.RemoveAll()
+		content.Add(containers.Stimuli)
+		content.Refresh()
 		event.CaptureEscape(window)
-		obj.GetPreTrainStimulus(window, canvases, instructFile.Instructions[4])
-		time.Sleep(time.Second * 5)
-
-		// I6
-		correct := false
-		obj.PreTrainInstruction(window, canvases, instructFile.Instructions[5], &correct, &waiting)
-		waitKeyPress()
-
-		if correct {
-			// I7
-			obj.GetInstruction(window, canvases, instructFile.Instructions[6], &waiting)
+		for i := 1; i <= 5; i++ {
+			obj.GetPreTrainStimulus(canvases, pictureFile.FPSlice[i])
+			time.Sleep(time.Second * time.Duration(showingTime))
+			canvases.Picture.File = pictureFile.Mask
+			canvases.Picture.Refresh()
+			time.Sleep(time.Second)
+			content.RemoveAll()
+			content.Add(containers.Instruction)
+			content.Refresh()
+			correct := false
+			obj.PreTrainInstruction(window, canvases, instructFile.Instructions[5], &correct, &waiting)
 			waitKeyPress()
-		} else {
-			// I8
-			obj.GetInstruction(window, canvases, instructFile.Instructions[7], &waiting)
-			waitKeyPress()
+			preTrialCorrection = append(preTrialCorrection, correct)
+			if correct {
+				// I7
+				obj.GetInstruction(window, canvases, instructFile.Instructions[6], &waiting)
+				waitKeyPress()
+			} else {
+				// I8
+				obj.GetInstruction(window, canvases, instructFile.Instructions[7], &waiting)
+				waitKeyPress()
+			}
+			content.RemoveAll()
+			content.Add(containers.Stimuli)
+			content.Refresh()
+			event.CaptureEscape(window)
 		}
 
 		// I9
+		content.RemoveAll()
+		content.Add(containers.Stimuli)
+		content.Refresh()
 		event.CaptureEscape(window)
-		obj.GetPreTrainStimulus(window, canvases, instructFile.Instructions[8])
-		time.Sleep(time.Second * 5)
-
-		// I10
-		correct = false
-		obj.PreTrainInstruction(window, canvases, instructFile.Instructions[9], &correct, &waiting)
-		waitKeyPress()
-
-		if correct {
-			// I11
-			obj.GetInstruction(window, canvases, instructFile.Instructions[10], &waiting)
+		for i := 1; i <= 5; i++ {
+			obj.GetPreTrainStimulus(canvases, pictureFile.OPSlice[i])
+			time.Sleep(time.Second * time.Duration(showingTime))
+			canvases.Picture.File = pictureFile.Mask
+			canvases.Picture.Refresh()
+			time.Sleep(time.Second)
+			content.RemoveAll()
+			content.Add(containers.Instruction)
+			content.Refresh()
+			correct := false
+			obj.PreTrainInstruction(window, canvases, instructFile.Instructions[9], &correct, &waiting)
 			waitKeyPress()
-		} else {
-			// I12
-			obj.GetInstruction(window, canvases, instructFile.Instructions[11], &waiting)
-			waitKeyPress()
+			preTrialCorrection = append(preTrialCorrection, !correct)
+			if !correct {
+				// I7
+				obj.GetInstruction(window, canvases, instructFile.Instructions[6], &waiting)
+				waitKeyPress()
+			} else {
+				// I8
+				obj.GetInstruction(window, canvases, instructFile.Instructions[7], &waiting)
+				waitKeyPress()
+			}
+			content.RemoveAll()
+			content.Add(containers.Stimuli)
+			content.Refresh()
+			event.CaptureEscape(window)
 		}
 
 		// I13
-		obj.GetInstruction(window, canvases, instructFile.Instructions[12], &waiting)
-		waitKeyPress()
+		content.RemoveAll()
+		content.Add(containers.Instruction)
+		content.Refresh()
+		if isPassed(preTrialCorrection) {
+			obj.GetInstruction(window, canvases, instructFile.Instructions[12], &waiting)
+			waitKeyPress()
+		} else {
+			exportData()
+			obj.END(window, canvases, instructFile.Instructions[15], &waiting)
+			waitKeyPress()
+			(*window).Close()
+		}
 
 		// Showing pics
 		content.RemoveAll()
@@ -185,6 +222,7 @@ func procedureController(window *fyne.Window) {
 		content.Refresh()
 
 		obj.END(window, canvases, instructFile.Instructions[15], &waiting)
+		waitKeyPress()
 		exportData()
 	}()
 
@@ -224,4 +262,18 @@ func exportData() {
 	w, _ := writer.Create(subject + ".csv")
 	io.Copy(w, file)
 	writer.Close()
+}
+
+func isPassed(preTrain []bool) bool {
+	acc := 0.0
+	for _, good := range preTrain {
+		if good {
+			acc++
+		}
+	}
+	criterion, _ := strconv.ParseFloat(os.Getenv("PRE_TRIAL_CRITERION"), 64)
+	if precision := acc / float64(len(preTrain)); precision >= criterion {
+		return true
+	}
+	return false
 }

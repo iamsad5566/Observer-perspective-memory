@@ -16,6 +16,8 @@ type PictureFile struct {
 	Mask           string
 	CurrentPicture string
 	Slice          []string
+	OPSlice        []string
+	FPSlice        []string
 }
 
 type InstructFile struct {
@@ -32,6 +34,16 @@ func (pic *PictureFile) Load() {
 	loadEnv()
 	for i := 1; i <= trialsNum; i++ {
 		pic.Slice = append(pic.Slice, prefixPic+strconv.Itoa(i)+suffixPic)
+	}
+
+	prefixPic = "material/OP/OP"
+	for i := 1; i <= 6; i++ {
+		pic.OPSlice = append(pic.OPSlice, prefixPic+strconv.Itoa(i)+suffixPic)
+	}
+
+	prefixPic = "material/FP/FP"
+	for i := 1; i <= 6; i++ {
+		pic.FPSlice = append(pic.FPSlice, prefixPic+strconv.Itoa(i)+suffixPic)
 	}
 }
 
