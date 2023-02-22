@@ -34,15 +34,17 @@ func (c *Canvases) Load(instructFile *material.InstructFile, pictureFile *materi
 
 	c.Picture = canvas.NewImageFromFile(pictureFile.CurrentPicture)
 	c.Picture.SetMinSize(fyne.Size{Width: picWidth, Height: picHeight})
-	c.Picture.FillMode = canvas.ImageFillStretch
+	c.Picture.FillMode = canvas.ImageFillContain
 
 	c.Mask = canvas.NewImageFromFile(pictureFile.Mask)
 	c.Mask.SetMinSize(fyne.Size{Width: width, Height: height})
-	c.Mask.FillMode = canvas.ImageFillContain
+	c.Mask.FillMode = canvas.ImageFillStretch
 }
 
-func (c *Canvases) ReSize(index int) {
-	c.Picture.SetMinSize(fyne.Size{Width: picWidth * ratio[index%len(ratio)], Height: picHeight * ratio[index%len(ratio)]})
+func (c *Canvases) ReSize(index int) float32 {
+	r := ratio[index%len(ratio)]
+	c.Picture.SetMinSize(fyne.Size{Width: picWidth * r , Height: picHeight * r })
+	return r
 }
 
 func loadEnv() {

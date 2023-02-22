@@ -21,14 +21,13 @@ func CaptureEscape(window *fyne.Window) {
 	}
 }
 
-func CaptureZoom(window *fyne.Window, target *canvas.Image, waiting *bool, result *[]float32) {
+func CaptureZoom(window *fyne.Window, target *canvas.Image, waiting *bool, ratio float32, result *[]float32) {
 	width := target.MinSize().Width
 	height := target.MinSize().Height
 
 	_, w := getHeightAndWidth()
 	innerSide64, _ := strconv.ParseFloat(os.Getenv("INNER_WINDOW_SIDE"), 32)
 	innerSide := float32(innerSide64)
-	var ratio float32 = 1
 
 	if desk, ok := (*window).Canvas().(desktop.Canvas); ok {
 		desk.SetOnKeyDown(func(ke *fyne.KeyEvent) {
@@ -86,7 +85,7 @@ func Leave(window *fyne.Window, waiting *bool) {
 	if desk, ok := (*window).Canvas().(desktop.Canvas); ok {
 		desk.SetOnKeyDown(func(ke *fyne.KeyEvent) {
 			if ke.Name == "Return" || ke.Name == "Space" {
-				(*window).Close()
+				defer (*window).Close()
 			}
 		})
 	}

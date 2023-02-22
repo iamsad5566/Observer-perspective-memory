@@ -221,9 +221,9 @@ func procedureController(window *fyne.Window) {
 		content.Add(containers.Instruction)
 		content.Refresh()
 
+		exportData()
 		obj.END(window, canvases, instructFile.Instructions[15], &waiting)
 		waitKeyPress()
-		exportData()
 	}()
 
 	(*window).SetContent(content)
@@ -252,7 +252,7 @@ func exportData() {
 	for i, ratio := range result {
 		file.WriteString(fmt.Sprintf("%d,%f,%d\n", i+1, ratio, group))
 	}
-	file.Close()
+	defer file.Close()
 
 	zipFile, _ := os.Create("result/" + subject + ".zip")
 	defer zipFile.Close()
@@ -261,7 +261,7 @@ func exportData() {
 	file, _ = os.Open("result/" + subject + ".csv")
 	w, _ := writer.Create(subject + ".csv")
 	io.Copy(w, file)
-	writer.Close()
+	defer writer.Close()
 }
 
 func isPassed(preTrain []bool) bool {

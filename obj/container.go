@@ -43,9 +43,9 @@ func GetStimulus(canvases *Canvases, fileName string) {
 
 func GetResponseToStimulus(window *fyne.Window, canvases *Canvases, fileName string, waiting *bool, result *[]float32, ratioIndex int) {
 	canvases.Picture.File = fileName
-	canvases.ReSize(ratioIndex)
+	ratio := canvases.ReSize(ratioIndex)
 	canvases.Picture.Refresh()
-	event.CaptureZoom(window, canvases.Picture, waiting, result)
+	event.CaptureZoom(window, canvases.Picture, waiting, ratio, result)
 }
 
 func END(window *fyne.Window, canvases *Canvases, fileName string, waiting *bool) {
