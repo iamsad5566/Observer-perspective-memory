@@ -65,17 +65,20 @@ func SpaceContinue(window *fyne.Window, waiting *bool) {
 	}
 }
 
-func PreTrainResponse(window *fyne.Window, correct *bool, waiting *bool) {
+func PreTrainResponse(window *fyne.Window, correct *bool, waiting *bool, preType int) {
 	if desk, ok := (*window).Canvas().(desktop.Canvas); ok {
 		desk.SetOnKeyDown(func(ke *fyne.KeyEvent) {
-			if ke.Name == "F" {
+			if ke.Name == "F" && preType == 5 {
 				*correct = true
 				*waiting = false
-			} else if ke.Name == "J" {
-				*correct = false
+			} else if ke.Name == "J" && preType == 9 {
+				*correct = true
 				*waiting = false
 			} else if ke.Name == "Escape" {
 				(*window).Close()
+			} else if ke.Name == "F" || ke.Name == "J" {
+				*correct = false
+				*waiting = false
 			}
 		})
 	}

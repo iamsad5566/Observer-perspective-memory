@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"observerPerspective/event"
 	"observerPerspective/material"
 	"observerPerspective/obj"
@@ -32,6 +33,12 @@ var containers *obj.Containers = &obj.Containers{}
 
 // Result
 var result = []float32{}
+var preTrialCorrection = []bool{}
+
+const (
+	FP = 5
+	OP = 9
+)
 
 func main() {
 	loadEnv()
@@ -72,7 +79,6 @@ func openGUI() {
 func procedureController(window *fyne.Window) {
 
 	content := container.NewCenter(containers.Instruction)
-	preTrialCorrection := []bool{}
 
 	go func() {
 		// I1
@@ -96,65 +102,19 @@ func procedureController(window *fyne.Window) {
 		content.Add(containers.Stimuli)
 		content.Refresh()
 		event.CaptureEscape(window)
-		for i := 1; i <= 5; i++ {
-			obj.GetPreTrainStimulus(canvases, pictureFile.FPSlice[i])
-			time.Sleep(time.Second * time.Duration(showingTime))
-			canvases.Picture.File = pictureFile.Mask
-			canvases.Picture.Refresh()
-			time.Sleep(time.Second)
-			content.RemoveAll()
-			content.Add(containers.Instruction)
-			content.Refresh()
-			correct := false
-			obj.PreTrainInstruction(window, canvases, instructFile.Instructions[5], &correct, &waiting)
-			waitKeyPress()
-			preTrialCorrection = append(preTrialCorrection, correct)
-			if correct {
-				// I7
-				obj.GetInstruction(window, canvases, instructFile.Instructions[6], &waiting)
-				waitKeyPress()
-			} else {
-				// I8
-				obj.GetInstruction(window, canvases, instructFile.Instructions[7], &waiting)
-				waitKeyPress()
+		opIdx := 0
+		fpIdx := 0
+		conditionList := []int{1, 1, 1, 1, 1, 2, 2, 2, 2, 2}
+		shuffle(&conditionList)
+		for i := 0; i < 10; i++ {
+			switch conditionList[i] {
+			case 1:
+				preTrialController(content, window, opIdx, pictureFile.FPSlice, OP)
+				opIdx++
+			case 2:
+				preTrialController(content, window, fpIdx, pictureFile.OPSlice, FP)
+				fpIdx++
 			}
-			content.RemoveAll()
-			content.Add(containers.Stimuli)
-			content.Refresh()
-			event.CaptureEscape(window)
-		}
-
-		// I9
-		content.RemoveAll()
-		content.Add(containers.Stimuli)
-		content.Refresh()
-		event.CaptureEscape(window)
-		for i := 1; i <= 5; i++ {
-			obj.GetPreTrainStimulus(canvases, pictureFile.OPSlice[i])
-			time.Sleep(time.Second * time.Duration(showingTime))
-			canvases.Picture.File = pictureFile.Mask
-			canvases.Picture.Refresh()
-			time.Sleep(time.Second)
-			content.RemoveAll()
-			content.Add(containers.Instruction)
-			content.Refresh()
-			correct := false
-			obj.PreTrainInstruction(window, canvases, instructFile.Instructions[9], &correct, &waiting)
-			waitKeyPress()
-			preTrialCorrection = append(preTrialCorrection, !correct)
-			if !correct {
-				// I7
-				obj.GetInstruction(window, canvases, instructFile.Instructions[6], &waiting)
-				waitKeyPress()
-			} else {
-				// I8
-				obj.GetInstruction(window, canvases, instructFile.Instructions[7], &waiting)
-				waitKeyPress()
-			}
-			content.RemoveAll()
-			content.Add(containers.Stimuli)
-			content.Refresh()
-			event.CaptureEscape(window)
 		}
 
 		// I13
@@ -276,4 +236,37 @@ func isPassed(preTrain []bool) bool {
 		return true
 	}
 	return false
+}
+
+func preTrialController(content *fyne.Container, window *fyne.Window, idx int, slice []string, preType int) {
+	obj.GetPreTrainStimulus(canvases, slice[idx])
+	time.Sleep(time.Second * time.Duration(showingTime))
+	canvases.Picture.File = pictureFile.Mask
+	canvases.Picture.Refresh()
+	time.Sleep(time.Second)
+	content.RemoveAll()
+	content.Add(containers.Instruction)
+	content.Refresh()
+	correct := false
+	obj.PreTrainInstruction(window, canvases, instructFile.Instructions[preType], &correct, &waiting, preType)
+	waitKeyPress()
+	preTrialCorrection = append(preTrialCorrection, !correct)
+	if !correct {
+		// I7
+		obj.GetInstruction(window, canvases, instructFile.Instructions[6], &waiting)
+		waitKeyPress()
+	} else {
+		// I8
+		obj.GetInstruction(window, canvases, instructFile.Instructions[7], &waiting)
+		waitKeyPress()
+	}
+	content.RemoveAll()
+	content.Add(containers.Stimuli)
+	content.Refresh()
+	event.CaptureEscape(window)
+}
+
+func shuffle(conditions *[]int) {
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(*conditions), func(i, j int) { (*conditions)[i], (*conditions)[j] = (*conditions)[j], (*conditions)[i] })
 }

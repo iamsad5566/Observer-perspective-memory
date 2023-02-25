@@ -29,11 +29,11 @@ func GetPreTrainStimulus(canvases *Canvases, fileName string) {
 	canvases.Picture.Refresh()
 }
 
-func PreTrainInstruction(window *fyne.Window, canvases *Canvases, fileName string, correct *bool, waiting *bool) {
+func PreTrainInstruction(window *fyne.Window, canvases *Canvases, fileName string, correct *bool, waiting *bool, preType int) {
 	canvases.Instruction.File = fileName
 	canvases.Instruction.Refresh()
 
-	event.PreTrainResponse(window, correct, waiting)
+	event.PreTrainResponse(window, correct, waiting, preType)
 }
 
 func GetStimulus(canvases *Canvases, fileName string) {
