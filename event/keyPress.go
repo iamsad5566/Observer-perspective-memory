@@ -10,6 +10,10 @@ import (
 )
 
 const percentage float32 = 1.02
+const (
+	FP = 5
+	OP = 9
+)
 
 func CaptureEscape(window *fyne.Window) {
 	if desk, ok := (*window).Canvas().(desktop.Canvas); ok {
@@ -68,10 +72,10 @@ func SpaceContinue(window *fyne.Window, waiting *bool) {
 func PreTrainResponse(window *fyne.Window, correct *bool, waiting *bool, preType int) {
 	if desk, ok := (*window).Canvas().(desktop.Canvas); ok {
 		desk.SetOnKeyDown(func(ke *fyne.KeyEvent) {
-			if ke.Name == "F" && preType == 5 {
+			if ke.Name == "F" && preType == FP {
 				*correct = true
 				*waiting = false
-			} else if ke.Name == "J" && preType == 9 {
+			} else if ke.Name == "J" && preType == OP {
 				*correct = true
 				*waiting = false
 			} else if ke.Name == "Escape" {
