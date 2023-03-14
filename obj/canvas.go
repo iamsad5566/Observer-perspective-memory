@@ -40,7 +40,7 @@ func (c *Canvases) Load(instructFile *material.InstructFile, pictureFile *materi
 
 	c.Mask = canvas.NewImageFromFile(pictureFile.Mask)
 	c.Mask.SetMinSize(fyne.Size{Width: width, Height: height})
-	c.Mask.FillMode = canvas.ImageFillStretch
+	c.Mask.FillMode = canvas.ImageFill(canvas.ImageScaleSmooth)
 }
 
 func (c *Canvases) ReSize(index int) float32 {
