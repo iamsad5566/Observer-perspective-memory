@@ -15,6 +15,8 @@ var width float32
 var height float32
 var picWidth float32
 var picHeight float32
+var instructWidth float32
+var instructHeight float32
 var ratio = []float32{1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9}
 
 type Canvases struct {
@@ -29,7 +31,7 @@ func (c *Canvases) Load(instructFile *material.InstructFile, pictureFile *materi
 	rand.Shuffle(len(ratio), func(i, j int) { ratio[i], ratio[j] = ratio[j], ratio[i] })
 
 	c.Instruction = canvas.NewImageFromFile(instructFile.Instructions[0])
-	c.Instruction.SetMinSize(fyne.Size{Width: width, Height: height})
+	c.Instruction.SetMinSize(fyne.Size{Width: instructWidth, Height: instructHeight})
 	c.Instruction.FillMode = canvas.ImageFillContain
 
 	c.Picture = canvas.NewImageFromFile(pictureFile.CurrentPicture)
@@ -43,20 +45,22 @@ func (c *Canvases) Load(instructFile *material.InstructFile, pictureFile *materi
 
 func (c *Canvases) ReSize(index int) float32 {
 	r := ratio[index%len(ratio)]
-	c.Picture.SetMinSize(fyne.Size{Width: picWidth * r , Height: picHeight * r })
+	c.Picture.SetMinSize(fyne.Size{Width: picWidth * r, Height: picHeight * r})
 	return r
 }
 
 func loadEnv() {
-	strWidth := os.Getenv("WIDTH")
-	strHeight := os.Getenv("HEIGHT")
-	width64, _ := strconv.ParseFloat(strWidth, 32)
-	height64, _ := strconv.ParseFloat(strHeight, 32)
-	width = float32(width64)
-	height = float32(height64)
+	width = parseStrToFloat(os.Getenv("WIDTH"))
+	height = parseStrToFloat(os.Getenv("HEIGHT"))
 
-	picW, _ := strconv.ParseFloat(os.Getenv("PIC_WIDTH"), 32)
-	picH, _ := strconv.ParseFloat(os.Getenv("PIC_HEIGHT"), 32)
-	picWidth = float32(picW)
-	picHeight = float32(picH)
+	picWidth = parseStrToFloat(os.Getenv("PIC_WIDTH"))
+	picHeight = parseStrToFloat(os.Getenv("PIC_HEIGHT"))
+
+	instructWidth = parseStrToFloat(os.Getenv("INSTRUCT_WIDTH"))
+	instructHeight = parseStrToFloat(os.Getenv("INSTRUCT_HEIGHT"))
+}
+
+func parseStrToFloat(str string) float32 {
+	f, _ := strconv.ParseFloat(str, 32)
+	return float32(f)
 }
